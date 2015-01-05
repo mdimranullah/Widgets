@@ -51,10 +51,14 @@
         <div id="tocContainer">
             <div id="TableOfContents"></div>
         </div>
+        <div id="odometerContainer">
+            <div id="Odometer"></div>
+        </div>        
         <h2>Change Options</h2>
         <ul class="change-options">
-            <li>Theme: <input id="theme_form" type="text" value="TableOfContents" /></li>
+            <li>Theme: <input id="theme_form" type="text" value="TableOfContents" /></li>            
             <li>Visible: <input id="visible_form" type="checkbox" checked /></li>
+            <li>Odometer Show: <input id="odometer_show" type="checkbox" checked /></li>
         </ul>
         <p><a href="https://github.com/esri/arcgis-dijit-table-of-contents">Documentation & Download</a></p>
     </div>
@@ -71,7 +75,7 @@
     </script>
     <script src="http://js.arcgis.com/3.6/" type="text/javascript"></script>
     <script type="text/javascript">
-        require(["dojo/_base/lang", "esri/map", "application/TableOfContents", "esri/arcgis/utils", "dojo/on", "dojo/dom"], function(lang, Map, TableOfContents, arcgisUtils, on, dom){
+        require(["dojo/_base/lang", "esri/map", "application/TableOfContents", "application/Odometer", "esri/arcgis/utils", "dojo/on", "dojo/dom"], function (lang, Map, TableOfContents, odometerWidget, arcgisUtils, on, dom) {
             arcgisUtils.createMap('df8bcc10430f48878b01c96e907a1fc3', "map", {
                 mapOptions: {
                     //Optionally define additional map config here for example you can 
@@ -88,7 +92,12 @@
                     layers: layers
                 }, "TableOfContents");
                 myWidget.startup();
-                
+
+                odometerWidget = new odometerWidget({
+                    map: map,
+                    layers:layers
+                }, "Odometer");
+                odometerWidget.startup();                
                 
                 on(dom.byId('theme_form'), 'keyup', lang.hitch(this, function(evt){
                     myWidget.set("theme", evt.target.value);
@@ -97,8 +106,10 @@
                 on(dom.byId('visible_form'), 'change', lang.hitch(this, function(evt){
                     myWidget.set("visible", evt.target.checked);
                 }));
-                
-             
+
+                //on(dom.byId('odometer_show'), 'change', lang.hitch(this, function (evt) {
+                //    odometerWidget.set("visible", evt.target.checked);
+                //}));
                 
                 
             }), lang.hitch(this, function (error) {
